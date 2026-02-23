@@ -23,14 +23,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Configure and install PHP extensions
-RUN git clone https://github.com/Imagick/imagick.git --depth 1 /tmp/imagick \
-    && cd /tmp/imagick \
-    && git fetch origin master \
-    && git switch master \
-    && phpize \
-    && ./configure \
-    && make \
-    && make install \
+RUN pecl install -o -f imagick-3.8.1 \
     && docker-php-ext-enable imagick \
     && docker-php-ext-configure intl \
     && docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp \

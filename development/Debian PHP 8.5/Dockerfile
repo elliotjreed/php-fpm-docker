@@ -10,14 +10,12 @@ USER root
 
 COPY ./php-ini-overrides.ini /usr/local/etc/php/conf.d/99-overrides.ini
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    $PHPIZE_DEPS \
+RUN apt-get update && apt-get install -y --no-install-recommends $PHPIZE_DEPS \
     && pecl install xdebug-${XDEBUG_VERSION} \
     && docker-php-ext-enable xdebug \
     && pecl clear-cache \
     && docker-php-source delete \
     && { find /usr/local/lib -type f -print0 | xargs -0r strip --strip-all -p 2>/dev/null || true; } \
-    && apt-get purge -y --auto-remove $PHPIZE_DEPS \
     && rm -rf /tmp/* /usr/local/lib/php/doc/* /var/lib/apt/lists/*
 
 USER www-data
