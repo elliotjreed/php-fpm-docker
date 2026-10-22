@@ -1,6 +1,6 @@
 FROM bunchesflorapost/symfony-base:fpm-debian-8.5
 
-ENV XDEBUG_VERSION="3.5.0"
+ENV XDEBUG_VERSION="3.5.3"
 
 ENV TZ='Europe/London'
 

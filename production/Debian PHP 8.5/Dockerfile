@@ -5,11 +5,12 @@ LABEL Description="PHP FPM Docker image with Redis, BCMath, OPCache, APCu, Intl.
 ENV TZ='Europe/London'
 
 # Install dependencies using apt-get instead of apk
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install --assume-yes --no-install-recommends \
     git \
     libzip-dev \
     libicu-dev \
     libfreetype6-dev \
+    ffmpeg \
     libwebp-dev \
     libpng-dev \
     libjpeg62-turbo-dev \
@@ -20,14 +21,17 @@ RUN apt-get update && apt-get install -y \
     libgomp1 \
     libbz2-dev \
     unzip \
-    && rm -rf /var/lib/apt/lists/*
+    && rm -rf /var/lib/apt/lists/* \
+    && apt-get autoremove \
+    && apt-get clean
 
 # Configure and install PHP extensions
 RUN pecl install -o -f imagick-3.8.1 \
     && docker-php-ext-enable imagick \
     && docker-php-ext-configure intl \
+    && docker-php-ext-configure pcntl --enable-pcntl \
     && docker-php-ext-configure gd --enable-gd --with-freetype --with-jpeg --with-webp \
-    && docker-php-ext-install bcmath pdo_mysql intl fileinfo gd exif bz2 zip \
+    && docker-php-ext-install bcmath pdo_mysql intl fileinfo gd exif bz2 zip pcntl \
     && pecl install -o -f yaml \
     && docker-php-ext-enable yaml \
     && pecl install apcu \
